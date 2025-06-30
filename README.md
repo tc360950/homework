@@ -6,6 +6,9 @@ Run:
 make up-rebuild
 ```
 
+The API is available at http://localhost:8000
+
+You can access Swagger at http://localhost:8000/docs
 ## Development
 If you are developing on your local machine, create a virtual environment and install poetry:
 
