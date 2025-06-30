@@ -1,0 +1,63 @@
+[project]
+name = "service"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+readme = "README.md"
+packages = [{include = "service"}]
+
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi (>=0.115.14,<0.116.0)",
+    "uvicorn (>=0.35.0,<0.36.0)",
+    "tqdm (>=4.67.1,<5.0.0)",
+    "tavern (>=2.15.0,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.12.1"
+pytest = ">=7,<7.3"
+pytest-cov = "^6.2.1"
+
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+select = [
+    "ALL", # include all the rules, including new ones
+]
+ignore = [
+    "INP001",
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "EM101",
+    "TRY003",
+    "TC001",
+    "ANN204",
+    "D106",
+    "D205",
+    "TRY301"
+]
+
+[tool.ruff.extend-per-file-ignores]
+"tests/**/*.py" = [
+    "S101","PT011", "S311"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-s -v --durations=0"
+cache_dir = ".cache/pytest_cache"
+markers = [
+    "end_to_end: mark an end_to_end_test",
+    "unit: mark a unit tests",
+]

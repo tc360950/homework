@@ -1,0 +1,65 @@
+test_name: Add batch and get statistics for symbol
+
+includes:
+  - name: variables
+    description: variables
+    variables:
+      base_url: "http://127.0.0.1:8000"
+
+stages:
+  - name: Add batch for symbol "AAPL"
+    request:
+      url: "{base_url}/add_batch/"
+      method: POST
+      json:
+        symbol: "AAPL"
+        values: [100.0, 100.0]
+    response:
+      status_code: 200
+
+  - name: Get statistics for last 1e1 (10) values
+    request:
+      url: "{base_url}/stats/"
+      method: GET
+      params:
+        symbol: "AAPL"
+        k: 1
+    response:
+      status_code: 200
+
+  - name: Add another batch for symbol "AAPL"
+    request:
+      url: "{base_url}/add_batch/"
+      method: POST
+      json:
+        symbol: "AAPL"
+        values: [106.0, 108.5, 110.2, 109.9, 111.0]
+    response:
+      status_code: 200
+
+
+  - name: Get statistics for last 1e2 (100) values
+    request:
+      url: "{base_url}/stats/"
+      method: GET
+      params:
+        symbol: "AAPL"
+        k: 2
+    response:
+      status_code: 200
+      json:
+        symbol: "AAPL"
+        k: 2
+        statistics:
+          last: 111.0
+      strict: false
+
+  - name: Get statistics for new symbol with no data
+    request:
+      url: "{base_url}/stats/"
+      method: GET
+      params:
+        symbol: "NEW SYMBOL"
+        k: 1
+    response:
+      status_code: 404

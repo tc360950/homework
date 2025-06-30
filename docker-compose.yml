@@ -1,0 +1,28 @@
+x-service: &service
+  restart: unless-stopped
+  logging:
+    driver: "json-file"
+    options:
+      max-size: 100m
+      max-file: "3"
+
+services:
+  backend:
+    container_name: service
+    <<: *service
+    build:
+      target: prod
+      context: .
+      dockerfile: service/docker/Dockerfile
+      args:
+        - USERNAME=${DOCKER_USERNAME-service}
+        - USER_UID=${DOCKER_USER_UID-1000}
+        - USER_GID=${DOCKER_USER_GID-1000}
+        - WORKSPACE=${WORKSPACE-/app}
+    ports:
+      - "8000:8000"
+    networks:
+      - service_network
+
+networks:
+  service_network:
